@@ -1,15 +1,16 @@
-import { Link, routes } from '@redwoodjs/router'
 import { MetaTags } from '@redwoodjs/web'
-import ArticlesCell from 'src/components/ArticlesCell'
+import ArticleCell from 'src/components/ArticleCell'
 
-const ArticlePage = () => {
+interface Props {
+  id: number
+}
+
+const ArticlePage = ({ id }: Props) => {
   return (
     <>
       <MetaTags title="Article" description="Article page" />
-      <ArticlesCell />
 
-
-
+      <ArticleCell id={id} />
     </>
   )
 }

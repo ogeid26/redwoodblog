@@ -1,8 +1,7 @@
-// jsconfig.json at project root
-
 {
   "compilerOptions": {
     "module": "ES6",
+    "include": ["src/**/*"],
     "jsx": "preserve",
     "checkJs": true
   },
