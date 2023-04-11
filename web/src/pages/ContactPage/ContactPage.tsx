@@ -1,5 +1,6 @@
 import { Link, routes } from '@redwoodjs/router'
-import { MetaTags } from '@redwoodjs/web'
+import { Toaster, toast } from '@redwoodjs/web/dist/toast';
+import { MetaTags, useMutation } from '@redwoodjs/web'
 import {
   Form,
   Submit,
@@ -10,21 +11,41 @@ import {
   Label
 } from '@redwoodjs/forms'
 
+import {
+  CreateContactMutation,
+  CreateContactMutationVariables,
+} from 'types/graphql';
+
+const CREATE_CONTACT = gql `
+mutation CreateContactMutation($input: CreateContactInput! ){
+  createContact(input: $input) {
+    id
+  }
+}
+`
+
 interface FormValues {
   name: string
   email: string
   message: string
 }
 
+
+
 const ContactPage = () => {
-  const onSubmit: SubmitHandler<FormValues> = (data) => {
-    console.log(data)
-  }
+  const [create, { loading, error }] = useMutation<
+    CreateContactMutation,
+    CreateContactMutationVariables
+  >(CREATE_CONTACT, {
+    onCompleted: () => {
+      toast.success('Thank you for your submission!')
+    },
+  })
 
   return (
     <>
       <MetaTags title="Contact" description="Contact page" />
-
+      <Toaster />
       <Form onSubmit={onSubmit} config={{mode: 'onBlur'}}>
 
         <Label name="name" errorClassName='error'>Name</Label>
@@ -35,7 +56,9 @@ const ContactPage = () => {
         />
         <FieldError name="name" className="error" />
 
-        <Label name="email" errorClassName='error'>Email</Label>
+        <Label name="email" errorClassName='error'>
+          Email
+          </Label>
         <TextField
           name="email"
           validation={
